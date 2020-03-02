@@ -15,7 +15,7 @@
   "author": "Graham King",
   "license": "MIT",
   "dependencies": {
-    "@animando/redux-saga-callback": "^1.0.1",
+    "@animando/redux-saga-callback": "^1.0.5",
     "@stomp/stompjs": "^5.4.3",
     "redux-actions": "^2.6.5",
     "redux-saga": "^1.1.3",

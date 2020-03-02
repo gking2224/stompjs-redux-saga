@@ -80,7 +80,14 @@ const createSubscriptionSaga = (subscription: StompSubscription<any>, client: Cl
   }
 
   const subscriptionCallbackConfigurer: CallbackConfigurer<IMessage> = createSubscriptionCallbackConfigurer(subscription, client);
-  const subscriptionSaga = createCallbackReactingSaga(`subscription: ${subscription.path}`, 'unsubscribe', subscriptionCallbackConfigurer, subscription.routine.trigger, handleSubscribedMessage);
+  const subscriptionSaga = createCallbackReactingSaga(
+    `subscription: ${subscription.path}`,
+    subscriptionCallbackConfigurer,
+    subscription.routine.trigger,
+    handleSubscribedMessage,
+    true,
+    'unsubscribe'
+  );
 
   return function*() {
     try {
@@ -120,7 +127,7 @@ const createPublishSaga = (api: StompPublishApi, client: Client) => {
 
 const createOnConnectedSaga = (client: Client, api: StompApiDefinition) => {
   const stompClientDisconnectionCallbackConfigurer = createStompClientDisconnectionCallbackConfigurer(client);
-  const disconnectSaga = createCallbackSaga('stompOnDisconnect', null, stompClientDisconnectionCallbackConfigurer, stompDisconnected, false);
+  const disconnectSaga = createCallbackSaga('stompOnDisconnect', stompClientDisconnectionCallbackConfigurer, stompDisconnected);
 
   return function*() {
     yield fork(disconnectSaga);
@@ -137,10 +144,11 @@ export const createWsApiSaga = (config: StompConnectionConfig, api: StompApiDefi
   const stompClientConnectionCallbackConfigurer = createStompClientConnectionCallbackConfigurer(client);
   const stompConnectedSaga = createCallbackReactingSaga(
     'stompOnConnect',
-    DISCONNECT_ACTION,
     stompClientConnectionCallbackConfigurer,
     stompConnected,
-    createOnConnectedSaga(client, api), true);
+    createOnConnectedSaga(client, api),
+    true,
+    DISCONNECT_ACTION);
 
   client.activate();
 
