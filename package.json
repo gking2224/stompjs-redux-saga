@@ -1,6 +1,6 @@
 {
   "name": "@animando/stompjs-redux-saga",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Turns a callback into a redux saga",
   "main": "build/index.js",
   "types": "build/index.d.ts",
